@@ -45,6 +45,17 @@ public class AuthInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
+        // 处理OPTIONS请求 - 直接放行
+        if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+            log.debug("放行OPTIONS预检请求: {}", request.getRequestURI());
+            // 设置允许的请求方法和头部信息
+            response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+            response.setHeader("Access-Control-Allow-Headers", "Authorization, Content-Type, X-Requested-With");
+            response.setHeader("Access-Control-Max-Age", "3600");
+            return true;
+        }
+
+
         // 获取请求路径并进行一次性匹配分类
         String requestPath = request.getRequestURI();
         PathType pathType = getPathType(requestPath);
