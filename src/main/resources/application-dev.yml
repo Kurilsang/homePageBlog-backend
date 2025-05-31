@@ -1,0 +1,41 @@
+# 服务器配置
+server:
+  port: 8080
+
+spring:
+  # 数据库配置
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+  mvc:
+    view:
+      suffix: .html
+      prefix: /
+
+
+
+
+# MyBatis配置
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.tour.model
+  configuration:
+    map-underscore-to-camel-case: true
+
+# 日志配置
+logging:
+  level:
+    root: info
+    com.tour: debug
+    org.springframework.web: debug
+    org.springframework.security: debug
+  pattern:
+    console: '%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{15} - %msg%n'
+
+
+jwt:
+  secret: your_jwt_secret_key  # 建议使用Base64编码的字符串
+  expiration: 86400000         # token过期时间(毫秒)
