@@ -13,6 +13,11 @@ spring:
     view:
       suffix: .html
       prefix: /
+  #    文件上传大小限制
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
 
 
 
@@ -39,3 +44,28 @@ logging:
 jwt:
   secret: your_jwt_secret_key  # 建议使用Base64编码的字符串
   expiration: 86400000         # token过期时间(毫秒)
+
+# 安全配置
+security:
+  # 白名单路径，无需认证即可访问
+  whiteList:
+    - /api/auth/**        # 认证接口
+    - /api/articles       # 获取文章列表
+    - /api/articles/*     # 获取文章详情
+    - /api/profile        # 获取个人资料
+    - /error              # 错误页面
+    - /doc.html   # 接口文档
+    - /doc.html/**   # 接口文档
+    - /swagger-resources
+    - /v2/api-docs
+  # 管理员路径，需要管理员权限
+  adminUrls:
+    - /api/admin/**       # 管理员接口
+
+my:
+  minio:
+    access-key: 7f1qYrlpzVBmuFuE5WJP
+    secret-key: nVUTh5AKJ533yBfkz9esX8Mgbg65LpEyBWTqHlaV
+    ip_addr: https://www.kuril.site:9000
+    bucketName: public
+    filePath: /avatar

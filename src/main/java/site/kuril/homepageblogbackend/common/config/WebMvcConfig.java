@@ -1,18 +1,23 @@
 package site.kuril.homepageblogbackend.common.config;
 
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import site.kuril.homepageblogbackend.common.interceptor.AuthInterceptor;
 
 /**
- * Web MVC配置类
+ * Web MVC配置
+ * 
+ * @Author Kuril
  */
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
 
-
+    @Autowired
+    private AuthInterceptor authInterceptor;
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
@@ -29,4 +34,12 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .maxAge(3600);
     }
 
+    /**
+     * 添加拦截器
+     */
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        // 添加认证拦截器，拦截所有请求
+        registry.addInterceptor(authInterceptor).addPathPatterns("/**");
+    }
 } 

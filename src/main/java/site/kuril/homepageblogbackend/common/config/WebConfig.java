@@ -26,7 +26,7 @@ public class WebConfig implements WebMvcConfigurer {
         // 注册认证拦截器
         registry.addInterceptor(authInterceptor)
                 .addPathPatterns("/api/**")     // 拦截所有/api/路径
-                .excludePathPatterns(whiteListConfig.getUrls());  // 排除白名单路径
+                .excludePathPatterns(whiteListConfig.getWhiteList());  // 排除白名单路径
     }
 
     @Override

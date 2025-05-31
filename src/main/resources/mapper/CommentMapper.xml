@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="site.kuril.homepageblogbackend.mapper.CommentMapper">
+    <select id="selectArticleComments" resultType="site.kuril.homepageblogbackend.vo.CommentVO">
+        SELECT
+            c.id,
+            c.article_id as articleId,
+            c.parent_id as parentId,
+            p.author as parentAuthor,
+            c.user_id as userId,
+            c.author,
+            c.avatar,
+            c.content,
+            c.created_at as date,
+            c.status,
+            CASE WHEN c.user_id IS NOT NULL THEN true ELSE false END as isUser
+        FROM comment c
+        LEFT JOIN comment p ON c.parent_id = p.id
+        WHERE c.article_id = #{articleId}
+        <if test="status != null and status != ''">
+            AND c.status = #{status}
+        </if>
+        ORDER BY c.created_at DESC
+    </select>
+
+    <select id="selectCommentList" resultType="site.kuril.homepageblogbackend.vo.CommentVO">
+        SELECT
+            c.id,
+            c.article_id as articleId,
+            a.title as articleTitle,
+            c.parent_id as parentId,
+            p.author as parentAuthor,
+            c.user_id as userId,
+            c.author,
+            c.avatar,
+            c.content,
+            c.created_at as date,
+            c.status,
+            CASE WHEN c.user_id IS NOT NULL THEN true ELSE false END as isUser
+        FROM comment c
+        LEFT JOIN article a ON c.article_id = a.id
+        LEFT JOIN comment p ON c.parent_id = p.id
+        <where>
+            <if test="status != null and status != '' and status != 'all'">
+                AND c.status = #{status}
+            </if>
+            <if test="search != null and search != ''">
+                AND (
+                    c.content LIKE CONCAT('%', #{search}, '%')
+                    OR c.author LIKE CONCAT('%', #{search}, '%')
+                    OR a.title LIKE CONCAT('%', #{search}, '%')
+                )
+            </if>
+            <if test="userType != null and userType != '' and userType != 'all'">
+                <if test="userType == 'registered'">
+                    AND c.user_id IS NOT NULL
+                </if>
+                <if test="userType == 'anonymous'">
+                    AND c.user_id IS NULL
+                </if>
+            </if>
+        </where>
+        ORDER BY c.created_at DESC
+    </select>
+
+    <select id="selectUserComments" resultType="site.kuril.homepageblogbackend.vo.CommentVO">
+        SELECT
+            c.id,
+            c.article_id as articleId,
+            a.title as articleTitle,
+            c.content,
+            c.created_at as date,
+            c.status
+        FROM comment c
+        LEFT JOIN article a ON c.article_id = a.id
+        WHERE c.user_id = #{userId}
+        ORDER BY c.created_at DESC
+    </select>
+</mapper> 

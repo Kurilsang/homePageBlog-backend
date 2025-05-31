@@ -26,16 +26,16 @@ public class Knife4jConfig {
                 .useDefaultResponseMessages(false)
                 .apiInfo(apiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.tour.controller"))
+                .apis(RequestHandlerSelectors.basePackage("site.kuril.homepageblogbackend.controller"))
                 .paths(PathSelectors.any())
                 .build();
     }
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("旅游小程序接口文档")
+                .title("个人简易博客系统接口文档")
                 .description("包含用户认证、文件上传、个人信息等接口")
-                .contact(new Contact("tour", "", ""))
+                .contact(new Contact("homePageBlog", "", ""))
                 .version("1.0")
                 .build();
     }

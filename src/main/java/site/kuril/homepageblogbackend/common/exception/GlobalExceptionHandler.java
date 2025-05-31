@@ -1,6 +1,5 @@
 package site.kuril.homepageblogbackend.common.exception;
 
-
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
@@ -10,7 +9,11 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import site.kuril.homepageblogbackend.common.Result;
 
-
+/**
+ * 全局异常处理器
+ * 
+ * @Author Kuril
+ */
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -56,5 +59,29 @@ public class GlobalExceptionHandler {
     public Result<?> handleException(Exception e) {
         log.error("系统异常", e);
         return Result.error("系统繁忙，请稍后重试");
+    }
+
+    /**
+     * 处理未授权异常
+     * 
+     * @param e 未授权异常
+     * @return 返回结果
+     */
+    @ExceptionHandler(UnauthorizedException.class)
+    public Result<String> handleUnauthorizedException(UnauthorizedException e) {
+        log.error("未授权访问: {}", e.getMessage());
+        return Result.error(401, e.getMessage());
+    }
+    
+    /**
+     * 处理其他运行时异常
+     * 
+     * @param e 运行时异常
+     * @return 返回结果
+     */
+    @ExceptionHandler(RuntimeException.class)
+    public Result<String> handleRuntimeException(RuntimeException e) {
+        log.error("运行时异常: ", e);
+        return Result.error("服务器内部错误");
     }
 }
