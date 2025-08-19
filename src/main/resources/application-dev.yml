@@ -42,7 +42,7 @@ logging:
 
 
 jwt:
-  secret: your_jwt_secret_key  # 建议使用Base64编码的字符串
+  secret: kuril.site  # 建议使用Base64编码的字符串
   expiration: 86400000         # token过期时间(毫秒)
 
 # 安全配置
